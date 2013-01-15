@@ -2,6 +2,11 @@
 
 module System.Remote.Wai
     ( startServer
+    , serveCombined
+    , serveMany
+    , serveOne
+    , serveAll
+    , serveFile
     ) where
 
 import           Control.Applicative ((<$>), (<|>))
@@ -63,13 +68,15 @@ monitor counters gauges labels req
     | wantJson && matchPath "labels" = serveMany labels req
     | wantText && matchPath "labels" = serveOne labels req
     | wantJson = serveAll counters gauges labels req
-    | otherwise = do
-        dataDir <- fromText . T.pack <$> liftIO getDataDir
-        staticApp (defaultFileServerSettings (dataDir </> "assets")) req
+    | otherwise = serveFile req
   where
     wantJson = acceptingType "application/json" req
     wantText = acceptingType "text/plain" req
     matchPath str = not (null (pathInfo req)) && str == head (pathInfo req)
+
+serveFile req = do
+    dataDir <- fromText . T.pack <$> liftIO getDataDir
+    staticApp (defaultFileServerSettings (dataDir </> "assets")) req
 
 -- | The Accept header of the request.
 acceptHeader :: Request -> Maybe B.ByteString

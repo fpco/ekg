@@ -2,6 +2,8 @@
 
 module System.Remote.Wai
     ( startServer
+    , monitor
+    , serveMonitor
     , serveCombined
     , serveMany
     , serveOne
@@ -50,7 +52,12 @@ textHeaders :: ResponseHeaders
 textHeaders = [("Content-Type", "text/plain")]
 
 monitor :: IORef Counters -> IORef Gauges -> IORef Labels -> Application
-monitor counters gauges labels req
+monitor counters gauges labels req =
+    serveMonitor counters gauges labels (pathInfo req) req
+
+serveMonitor :: IORef Counters -> IORef Gauges -> IORef Labels -> [T.Text]
+                -> Application
+serveMonitor counters gauges labels paths req
     | wantJson && matchPath "combined" =
         serveCombined counters gauges labels req
     | wantJson && matchPath "counters" = serveMany counters req
@@ -64,7 +71,7 @@ monitor counters gauges labels req
   where
     wantJson = acceptingType "application/json" req
     wantText = acceptingType "text/plain" req
-    matchPath str = not (null (pathInfo req)) && str == head (pathInfo req)
+    matchPath str = not (null paths) && str == head paths
 
 serveFile req = do
     dataDir <- fromText . T.pack <$> liftIO getDataDir

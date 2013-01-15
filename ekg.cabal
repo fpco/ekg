@@ -29,8 +29,7 @@ library
                        System.Remote.Label
                        System.Remote.Monitoring
 
-  -- other-modules:       Paths_ekg
-  exposed-modules:     Paths_ekg
+  other-modules:       Paths_ekg
                        System.Remote.Common
                        System.Remote.Counter.Internal
                        System.Remote.Gauge.Internal
@@ -55,7 +54,7 @@ library
                        http-types < 0.7.4,
                        system-filepath < 0.5
       cpp-options:     -DUSE_WAI
-      other-modules:   System.Remote.Wai
+      exposed-modules: System.Remote.Wai
   else
       build-depends:   snap-core < 0.10,
                        snap-server < 0.10

@@ -1,5 +1,5 @@
 name:                ekg
-version:             0.3.1.2
+version:             0.3.2
 synopsis:            Remote monitoring of processes
 description:
   This library lets you remotely monitor a running process over HTTP.
@@ -28,9 +28,9 @@ library
                        System.Remote.Gauge
                        System.Remote.Label
                        System.Remote.Monitoring
+                       System.Remote.Common
 
   other-modules:       Paths_ekg
-                       System.Remote.Common
                        System.Remote.Counter.Internal
                        System.Remote.Gauge.Internal
                        System.Remote.Label.Internal

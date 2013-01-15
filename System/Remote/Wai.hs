@@ -9,8 +9,7 @@ module System.Remote.Wai
     , serveFile
     ) where
 
-import           Control.Applicative ((<$>), (<|>))
-import           Control.Monad (join, unless)
+import           Control.Applicative ((<$>))
 import           Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson.Types as A
 import qualified Data.ByteString as B
@@ -20,15 +19,8 @@ import qualified Data.ByteString.Lazy.Internal as BLI
 import qualified Data.HashMap.Strict as M
 import           Data.IORef (IORef)
 import qualified Data.List as List
-import qualified Data.Map as Map
-import           Data.Maybe (listToMaybe)
-import           Data.Monoid
-import           Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
-import qualified Data.Text.Lazy as TL
-import qualified Data.Text.Lazy.Encoding as TL
-import           Debug.Trace
 import           Filesystem.Path.CurrentOS hiding (null)
 import           Network.HTTP.Types
 import           Network.Wai
@@ -90,7 +82,7 @@ acceptingType fmt req =
 serveWrapper ::
     (IORef Counters -> IORef Gauges -> IORef Labels -> IO BL.ByteString)
     -> IORef Counters -> IORef Gauges -> IORef Labels -> Application
-serveWrapper f counters gauges labels req = do
+serveWrapper f counters gauges labels _ = do
     bs <- liftIO $ f counters gauges labels
     return $ responseLBS status200 jsonHeaders bs
 {-# INLINABLE serveWrapper #-}
@@ -109,7 +101,7 @@ serveCombined = serveWrapper buildCombined
 
 -- | Serve a collection of counters or gauges, as a JSON object.
 serveMany :: (Ref r t, A.ToJSON t) => IORef (M.HashMap T.Text r) -> Application
-serveMany mapRef req = do
+serveMany mapRef _ = do
     bs <- liftIO $ buildMany mapRef
     return $ responseLBS status200 jsonHeaders bs
 {-# INLINABLE serveMany #-}

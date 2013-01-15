@@ -45,7 +45,11 @@ import Prelude hiding (read)
 
 import System.Remote.Common
 
+#if USE_WAI
+import System.Remote.Wai
+#else
 import System.Remote.Snap
+#endif
 
 -- $configuration
 --

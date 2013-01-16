@@ -46,19 +46,19 @@ library
                        unordered-containers < 0.3
 
   ghc-options:         -Wall
-  if flag(snap)
-      build-depends:   snap-core < 0.10,
-                       snap-server < 0.10
-      other-modules:   System.Remote.Snap
-  else
-      build-depends:   wai < 1.4,
-                       wai-extra < 1.4,
-                       wai-app-static < 1.4,
-                       warp < 1.4,
-                       http-types < 0.7.4,
-                       system-filepath < 0.5
-      cpp-options:     -DUSE_WAI
-      exposed-modules: System.Remote.Wai
+  -- if flag(snap)
+  --     build-depends:   snap-core < 0.10,
+  --                      snap-server < 0.10
+  --     other-modules:   System.Remote.Snap
+  -- else
+  build-depends:   wai < 1.4,
+                   wai-extra < 1.4,
+                   wai-app-static < 1.4,
+                   warp < 1.4,
+                   http-types < 0.7.4,
+                   system-filepath < 0.5
+  cpp-options:     -DUSE_WAI
+  exposed-modules: System.Remote.Wai
 
 source-repository head
   type:     git

@@ -21,7 +21,7 @@ extra-source-files:  LICENSE.icons LICENSE.javascript README.md
                      assets/jquery-1.6.4.js assets/jquery.flot.js
                      examples/Basic.hs
 
-flag wai
+flag snap
 
 library
   exposed-modules:     System.Remote.Counter
@@ -46,7 +46,11 @@ library
                        unordered-containers < 0.3
 
   ghc-options:         -Wall
-  if flag(wai)
+  if flag(snap)
+      build-depends:   snap-core < 0.10,
+                       snap-server < 0.10
+      other-modules:   System.Remote.Snap
+  else
       build-depends:   wai < 1.4,
                        wai-extra < 1.4,
                        wai-app-static < 1.4,
@@ -55,10 +59,6 @@ library
                        system-filepath < 0.5
       cpp-options:     -DUSE_WAI
       exposed-modules: System.Remote.Wai
-  else
-      build-depends:   snap-core < 0.10,
-                       snap-server < 0.10
-      other-modules:   System.Remote.Snap
 
 source-repository head
   type:     git

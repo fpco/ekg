@@ -51,11 +51,11 @@ library
   --                      snap-server < 0.10
   --     other-modules:   System.Remote.Snap
   -- else
-  build-depends:   wai < 1.4,
+  build-depends:   wai < 1.5,
                    wai-extra < 1.4,
                    wai-app-static < 1.4,
                    warp < 1.4,
-                   http-types < 0.7.4,
+                   http-types < 0.9,
                    system-filepath < 0.5
   cpp-options:     -DUSE_WAI
   exposed-modules: System.Remote.Wai
